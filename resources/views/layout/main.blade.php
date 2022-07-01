@@ -15,6 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 </head>
 <body>
+    {{-- navigation bar --}}
     <nav class="navbar bg-light">
         <div class="container-fluid">
             <a class="navbar-brand">Navbar</a>
@@ -24,6 +25,7 @@
             </div>
         </div>
     </nav>
+    {{-- contain the page contents --}}
     @yield('content')
 </body>
 </html>
