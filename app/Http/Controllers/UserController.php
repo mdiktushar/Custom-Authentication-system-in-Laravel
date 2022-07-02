@@ -36,7 +36,7 @@ class UserController extends Controller
     public function login(Request $request)
     {
         # Validation
-        return $request->validate([
+        $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'min:6', 'max:20']
         ]);
@@ -51,8 +51,8 @@ class UserController extends Controller
      */
     public function signUp(Request $request)
     {
-         # Validation
-         return $request->validate([
+        # Validation
+        $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users',
@@ -62,7 +62,7 @@ class UserController extends Controller
         # create users
         User::create($request->all());
 
-        return back();
+        return view('welcome');
     }
 
     /**
