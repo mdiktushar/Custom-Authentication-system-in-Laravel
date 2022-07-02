@@ -40,7 +40,7 @@ class UserController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required', 'min:6', 'max:20']
         ]);
-        return $request->all();
+        return $request;
     }
 
     /**
@@ -58,7 +58,11 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|max:20|min:6|confirmed',
         ]);
-        return $request->all();
+
+        # create users
+        User::create($request->all());
+
+        return back();
     }
 
     /**
