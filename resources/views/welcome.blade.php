@@ -43,7 +43,7 @@
             {{-- login button --}}
             <button style="margin-top: 10px" type="submit" class="btn btn-success">Login</button>
             {{-- signup page link --}}
-            <a  class="form-text login-form-text" href="" style="color: red;">Don't have a account...!</a>
+            <a  class="form-text login-form-text" href={{ route('page.signup') }} style="color: red;">Don't have a account...!</a>
 
         </form>
     </div>

@@ -24,7 +24,7 @@ class UserController extends Controller
      */
     public function getSignUp()
     {
-        //
+        return view('auth.signup');
     }
 
     /**
@@ -51,7 +51,14 @@ class UserController extends Controller
      */
     public function signUp(Request $request)
     {
-        //
+         # Validation
+         return $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|max:20|min:6|confirmed',
+        ]);
+        return $request->all();
     }
 
     /**

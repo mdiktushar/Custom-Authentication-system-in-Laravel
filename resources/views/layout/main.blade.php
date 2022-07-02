@@ -20,8 +20,8 @@
         <div class="container-fluid">
             <a class="navbar-brand">Navbar</a>
             <div class="d-flex">
-                <a class="nav-link" href="#" style="padding-right: 5px">Login</a>
-                <a class="nav-link"  href="#" style="padding-left: 5px">Sign Up</a>
+                <a class="nav-link" href={{ route('page.login') }} style="padding-right: 5px">Login</a>
+                <a class="nav-link"  href={{ route('page.signup') }} style="padding-left: 5px">Sign Up</a>
             </div>
         </div>
     </nav>

@@ -23,10 +23,12 @@ use App\Http\Controllers\UserController;
 | GET Request
 */
 Route::get('/', [UserController::class, 'getLogin'])->name('page.login');
+
 /*
 | Get SignUp Page
 | GET Request
 */
+Route::get('/signup', [UserController::class, 'getSignUp'])->name('page.signup');
 
 # Action Routes
 # ------------------------------------------
@@ -34,7 +36,7 @@ Route::get('/', [UserController::class, 'getLogin'])->name('page.login');
 | SignUp User
 | POST Request
 */
-
+Route::post('/signup', [UserController::class, 'signUp'])->name('user.signup');
 /*
 | Login User
 | POST Request
