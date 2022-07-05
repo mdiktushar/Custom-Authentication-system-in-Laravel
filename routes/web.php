@@ -30,6 +30,12 @@ Route::get('/', [UserController::class, 'getLogin'])->name('page.login');
 */
 Route::get('/signup', [UserController::class, 'getSignUp'])->name('page.signup');
 
+/* 
+| Email Verification code
+| GET Request
+*/
+Route::get('/auth/verify-email/{verification_code}', [UserController::class, 'verifyEamil'])->name('verifyEamil');
+
 # Action Routes
 # ------------------------------------------
 /*

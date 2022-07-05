@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+// Email
+use Illuminate\Support\Facades\Mail;
+use App\Mail\eamil_verification_mail;
+
 class UserController extends Controller
 {
     /**
@@ -44,6 +48,20 @@ class UserController extends Controller
     }
 
     /**
+     * Send Verification Email.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendEmail($email)
+    {
+        $user = User::where('email', $email)->first();
+        $user->update([
+            'verification_code' =>  rand(10000000,50000000),
+        ]);
+        Mail::to($email)->send(new eamil_verification_mail($user)); 
+    }
+
+    /**
      * SignUp User.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -62,6 +80,8 @@ class UserController extends Controller
         # create users
         User::create($request->all());
 
+        $this->sendEmail($request->email);
+
         return view('welcome');
     }
 
@@ -73,6 +93,19 @@ class UserController extends Controller
     public function logoutUser()
     {
         //
+    }
+
+    /**
+     * verify email address.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function verifyEamil($verification_code)
+    {
+        $user=User::where('verification_code', $verification_code)->first();
+        if(!$user) {
+            return "Not Verified";
+        }
     }
 
 }
