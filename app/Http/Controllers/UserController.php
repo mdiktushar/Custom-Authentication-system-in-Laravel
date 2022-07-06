@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 // Email
 use Illuminate\Support\Facades\Mail;
 use App\Mail\eamil_verification_mail;
-use Illuminate\Routing\Route;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -52,12 +50,21 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function verifyEamil($verification_code)
+    public function verifyEamil($verification_code, $email)
     {
-        $user=User::where('verification_code', $verification_code)->first();
+        $user=User::where('email', $email)->first();
         if(!$user) {
+            return "No account found";
+        }
+
+        if ($verification_code == $user->verification_code) {
+            $user->update([
+                'email_verified_at' => date("Y-m-d H:i:s"),
+            ]);
+        } else {
             return "Not Verified";
         }
+        
     }
 
     /**
@@ -81,7 +88,7 @@ class UserController extends Controller
 
         $this->sendEmail($request->email);
 
-        return view('welcome');
+        return redirect()->route('page.login');
     }
 
     /**

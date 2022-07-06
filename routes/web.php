@@ -31,12 +31,6 @@ Route::group(['middleware' => ['Back']], function(){
     */
     Route::get('/signup', [UserController::class, 'getSignUp'])->name('page.signup');
 
-    /* 
-    | Email Verification code
-    | GET Request
-    */
-    Route::get('/auth/verify-email/{verification_code}', [UserController::class, 'verifyEamil'])->name('verifyEamil');
-
     # Action Routes
     # ------------------------------------------
     /*
@@ -67,3 +61,9 @@ Route::group(['middleware' => ['Auth']], function() {
     Route::get('/home', [HomeController::class, 'home'])->name('user.home');
 
 });
+
+/* 
+    | Email Verification code
+    | GET Request
+    */
+    Route::get('/auth/verify-email/{verification_code}/{email}', [UserController::class, 'verifyEamil'])->name('verifyEamil');

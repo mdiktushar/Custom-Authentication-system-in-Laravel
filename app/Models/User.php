@@ -46,10 +46,4 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = bcrypt($password);
     }
-
-    public function setVerificationCodeAttribute($verification_code)
-    {
-        $this->attributes['verification_code'] = bcrypt($verification_code);
-    }
-    
 }
