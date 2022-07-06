@@ -1,9 +1,9 @@
 <?php
+# inport controllers using namespace
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 
 use Illuminate\Support\Facades\Route;
-
-# inport controllers using namespace
-use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,40 +16,54 @@ use App\Http\Controllers\UserController;
 |
 */
 
-# Get Routes
+# Free Route
 # ------------------------------------------
-/*
-| Get Login Page/Welcome Page
-| GET Request
-*/
-Route::get('/', [UserController::class, 'getLogin'])->name('page.login');
+Route::group(['middleware' => ['Back']], function(){
+    /*
+    | Get Login Page/Welcome Page
+    | GET Request
+    */
+    Route::get('/', [UserController::class, 'getLogin'])->name('page.login');
 
-/*
-| Get SignUp Page
-| GET Request
-*/
-Route::get('/signup', [UserController::class, 'getSignUp'])->name('page.signup');
+    /*
+    | Get SignUp Page
+    | GET Request
+    */
+    Route::get('/signup', [UserController::class, 'getSignUp'])->name('page.signup');
 
-/* 
-| Email Verification code
-| GET Request
-*/
-Route::get('/auth/verify-email/{verification_code}', [UserController::class, 'verifyEamil'])->name('verifyEamil');
+    /* 
+    | Email Verification code
+    | GET Request
+    */
+    Route::get('/auth/verify-email/{verification_code}', [UserController::class, 'verifyEamil'])->name('verifyEamil');
 
-# Action Routes
-# ------------------------------------------
-/*
-| SignUp User
-| POST Request
-*/
-Route::post('/signup', [UserController::class, 'signUp'])->name('user.signup');
-/*
-| Login User
-| POST Request
-*/
-Route::post('/login', [UserController::class, 'login'])->name('user.login');
+    # Action Routes
+    # ------------------------------------------
+    /*
+    | SignUp User
+    | POST Request
+    */
+    Route::post('/signup', [UserController::class, 'signUp'])->name('user.signup');
+    /*
+    | Login User
+    | POST Request
+    */
+    Route::post('/login', [UserController::class, 'login'])->name('user.login');
 
-/*
-| Logout User
-| GET Request
-*/
+});
+
+
+/** Auth Routh */
+Route::group(['middleware' => ['Auth']], function() {
+    /*
+    | Logout User
+    | GET Request
+    */
+    Route::get('/logout', [UserController::class, 'logoutUser'])->name('user.logout');
+    /**
+     * Return homepage
+     * GET Request
+     */
+    Route::get('/home', [HomeController::class, 'home'])->name('user.home');
+
+});

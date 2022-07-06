@@ -37,4 +37,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Password Mutator
+     * hassing the password
+     */
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
+
+    public function setVerificationCodeAttribute($verification_code)
+    {
+        $this->attributes['verification_code'] = bcrypt($verification_code);
+    }
+    
 }

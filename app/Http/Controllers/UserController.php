@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 // Email
 use Illuminate\Support\Facades\Mail;
 use App\Mail\eamil_verification_mail;
+use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -32,22 +34,6 @@ class UserController extends Controller
     }
 
     /**
-     * Login User.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function login(Request $request)
-    {
-        # Validation
-        $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required', 'min:6', 'max:20']
-        ]);
-        return $request;
-    }
-
-    /**
      * Send Verification Email.
      *
      * @return \Illuminate\Http\Response
@@ -59,6 +45,19 @@ class UserController extends Controller
             'verification_code' =>  rand(10000000,50000000),
         ]);
         Mail::to($email)->send(new eamil_verification_mail($user)); 
+    }
+
+    /**
+     * verify email address.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function verifyEamil($verification_code)
+    {
+        $user=User::where('verification_code', $verification_code)->first();
+        if(!$user) {
+            return "Not Verified";
+        }
     }
 
     /**
@@ -86,26 +85,44 @@ class UserController extends Controller
     }
 
     /**
+     * Login User.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function login(Request $request)
+    {
+        # Validation
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'min:6', 'max:20']
+        ]);
+
+        # finding the user
+        $user = User::where('email', "=", $request->email)->first();
+
+         /** if the email is found */
+        if (isset($user->id)) {
+            if (auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
+                return redirect()->route('user.home');
+            } else {
+                return "Error";
+            }
+            
+        } else { 
+            # the email is not found
+            return "the email is not found";
+        }
+    }
+
+    /**
      * Logout User and returns welcome page.
      *
      * @return \Illuminate\Http\Response
      */
     public function logoutUser()
     {
-        //
+        auth()->logout();
+        return redirect()->route('page.login');
     }
-
-    /**
-     * verify email address.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function verifyEamil($verification_code)
-    {
-        $user=User::where('verification_code', $verification_code)->first();
-        if(!$user) {
-            return "Not Verified";
-        }
-    }
-
 }
