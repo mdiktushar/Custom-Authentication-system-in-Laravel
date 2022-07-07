@@ -53,14 +53,15 @@ class UserController extends Controller
     public function verifyEamil($verification_code, $email)
     {
         $user=User::where('email', $email)->first();
-        if(!$user) {
-            return "No account found";
+        if (!isset($user->id)){
+            return redirect()->route('page.signup')->with('error', 'email is not found');
         }
 
         if ($verification_code == $user->verification_code) {
             $user->update([
                 'email_verified_at' => date("Y-m-d H:i:s"),
             ]);
+            return redirect()->route('page.login')->with("success", "Email is Verified Successfully You Can Login Now");
         } else {
             return "Not Verified";
         }
@@ -88,7 +89,7 @@ class UserController extends Controller
 
         $this->sendEmail($request->email);
 
-        return redirect()->route('page.login');
+        return redirect()->route('page.login')->with('success', 'Please Verify your email to login');
     }
 
     /**
@@ -107,18 +108,23 @@ class UserController extends Controller
 
         # finding the user
         $user = User::where('email', "=", $request->email)->first();
-
-         /** if the email is found */
+        /** if the email is found */
         if (isset($user->id)) {
+
+            # if email is not verified
+            if($user->email_verified_at == null) {
+                return redirect()->back()->with('error', 'The email is not verified');
+            }
+            # Loging in
             if (auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
-                return redirect()->route('user.home');
+                return redirect()->route('user.home')->with('success', 'welcome to the app');
             } else {
-                return "Error";
+                return redirect()->back()->with('error', 'wrong password');
             }
             
         } else { 
             # the email is not found
-            return "the email is not found";
+            return redirect()->back()->with('error', 'Email is not found');
         }
     }
 
@@ -130,6 +136,6 @@ class UserController extends Controller
     public function logoutUser()
     {
         auth()->logout();
-        return redirect()->route('page.login');
+        return redirect()->route('page.login')->with('success', 'Logout Successfully');
     }
 }

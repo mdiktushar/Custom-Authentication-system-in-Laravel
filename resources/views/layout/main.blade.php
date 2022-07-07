@@ -25,6 +25,21 @@
             </div>
         </div>
     </nav>
+    {{-- Error Flash Message --}}
+    @if (\Session::has('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ \Session::get('error') }}
+        </div>
+    @endif
+
+    {{-- Success Flash Message --}}
+    @if (\Session::has('success'))
+        <div class="alert alert-success" role="alert">
+            {{ \Session::get('success') }}
+        </div>
+    @endif
+
+
     {{-- contain the page contents --}}
     @yield('content')
 </body>
